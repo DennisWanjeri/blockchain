@@ -1,9 +1,11 @@
-function Blockchain()
+function Blockchain ()
 {
 this.chain = [];
 this.newTransactions = [];
 }
-//newBlock function
+/**
+*creates a newBlock 
+*/
 Blockchain.prototype.createNewBlock = function (nonce, previousBlockHash, hash)
 {
 const newBlock =
@@ -21,4 +23,9 @@ const newBlock =
         //previousblockhash deals with hashing prev block's data
         previousBlockHash: previousBlockHash,
   };
+this.newTransaction = [];
+//push newBlock to chain and return it
+this.chain.push(newBlock);
+return newBlock;
 };
+module.exports = Blockchain;
