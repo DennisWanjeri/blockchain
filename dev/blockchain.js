@@ -8,8 +8,7 @@ this.pendingTransactions = [];
 */
 Blockchain.prototype.createNewBlock = function (nonce, previousBlockHash, hash)
 {
-const newBlock =
-{
+const newBlock = {
  //our newblock will have an index
         index: this.chain.length + 1,
         //timestamp property to account for time a block is created
@@ -24,7 +23,8 @@ const newBlock =
         previousBlockHash: previousBlockHash,
   };
 //pending transaction object,pending transactions aren't recorded un//til a new block is created
-this.newTransaction = [];
+//empties the pending transactions array when a new block is created
+this.pendingTransactions = [];
 //push newBlock to chain and return it
 this.chain.push(newBlock);
 return newBlock;
@@ -52,11 +52,21 @@ const newTransaction = {
 amount: amount,
 sender: sender,
 recipient: recipient,
-}
+};
 //push our NewTransaction object to our pendingTransaction array
 this.pendingTransactions.push(newTransaction);
 //returns a block object,no. of block our transaction was pushed to
 return this.getLastBlock() ['index'] + 1;
 }
 
+/**
+*hashBlock - takes a block's data from our chain and hashes its data
+*into a fixed length string
+*@blockdata:input data from block to generate hash
+*Description:implementing SHA256 hashing method,a secure way to do so
+*/
+Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, nonce) {
+const sha256 = require('sha256');
+
+}
 module.exports = Blockchain;
