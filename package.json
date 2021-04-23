@@ -14,5 +14,8 @@
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/DennisWanjeri/blockchain/issues"
+  },
+  "dependencies": {
+    "express": "~4.17.1"
   }
 }
