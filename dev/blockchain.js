@@ -1,7 +1,10 @@
+const currentNodeUrl = process.argv[3];
 function Blockchain ()
 {
 this.chain = [];
-this.pendingTransactions = [];
+    this.pendingTransactions = [];
+    this.currentNodeUrl = currentNodeUrl;
+    this.currentNodes = [];
 this.createNewBlock(100, '0', '0');
 }
 /**
