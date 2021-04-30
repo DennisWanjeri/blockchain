@@ -6,7 +6,6 @@ const Blockchain = require('./blockchain');
 const bitcoin = new Blockchain();
 const { v4: uuidv4 } = require('uuid');
 const rp = require('request-promise');
-const Promise = require('promise');
 
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
@@ -45,13 +44,14 @@ app.post('/register-and-broadcast-node', function (req, res) {
 	//...'/register-node'
 	const requestOptions = {
 	    uri: networkNodeUrl + '/register-node',
-	    Method: 'POST',
+	    method: 'POST',
 	    body: {newNodeUrl: newNodeUrl},
 	    json:true
 	};
 	regNodesPromises.push(rp(requestOptions));
     });
-    Promise.all(regNodesPromises).then(data => {
+    Promise.all(regNodesPromises)
+    .then(data => {
 	//using the data
 	const bulkRegisterOptions = {
 	    uri: newNodeUrl + '/register-nodes-bulk',
@@ -60,17 +60,16 @@ app.post('/register-and-broadcast-node', function (req, res) {
 	    json:true
 	};
 	return rp(bulkRegisterOptions);
-	Promise.all(bulkRegisterOptions).then(data => {
-		res.json({note: 'New Node registered with network successfully' });
-	    });
-    });
+    })
+   .then(data => {
+       res.json({note: 'New Node registered with network successfully' });
+   });
 });
 app.post('/register-node', function (req, res) {
     //register a node with the network
     const newNodeUrl = req.body.newNodeUrl;
-    if (bitcoin.networkNodes.lastIndexOf(newNodeUrl, 0) == -1)
-	nodeNotAlreadyPresent = 1;
-    const notCurrentNode = bitcoin.currentNodeUrl != newNodeUrl;
+    const nodeNotAlreadyPresent = bitcoin.networkNodes.indexOf(newNodeUrl) == -1;
+    const notCurrentNode = bitcoin.currentNodeUrl !== newNodeUrl;
     if (nodeNotAlreadyPresent && notCurrentNode)
 	bitcoin.networkNodes.push(newNodeUrl);
     res.json({note: 'New node registered successfully.'});
