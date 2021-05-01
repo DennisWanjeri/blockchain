@@ -1,11 +1,13 @@
 const currentNodeUrl = process.argv[3];
+const { v4: uuidv4 } = require('uuid');
+
 function Blockchain ()
 {
 this.chain = [];
     this.pendingTransactions = [];
     this.currentNodeUrl = currentNodeUrl;
     this.networkNodes = [];
-this.createNewBlock(100, '0', '0');
+    this.createNewBlock(100, '0', '0');
 }
 /**
 *creates a newBlock
@@ -55,14 +57,15 @@ Blockchain.prototype.createNewTransaction = function (amount, sender,recipient) 
 const newTransaction = {
 amount: amount,
 sender: sender,
-recipient: recipient,
+    recipient: recipient,
+    transactionId: uuidv4().split('-').join('')
 };
-//push our NewTransaction object to our pendingTransaction array
-this.pendingTransactions.push(newTransaction);
-//returns a block object,no. of block our transaction was pushed to
-return this.getLastBlock() ['index'] + 1;
-}
-
+    return newTransaction;
+};
+Blockchain.prototype.addTransactionToPendingTransactions = function(transactionObj) {
+	this.pendingTransactions.push(transactionObj);
+	return this.getLastBlock() ['index'] + 1;
+};
 /**
 *hashBlock - takes a block's data from our chain and hashes its data
 *into a fixed length string
